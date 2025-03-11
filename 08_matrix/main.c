@@ -113,26 +113,6 @@ int main(void)
         }
     }
 
-    void matrix_mult_kernel(__global int* A, __global int* B, __global int* C, int N) {
-        printf("kernel");
-        int row = get_global_id(0);
-        int col = get_global_id(1);
-        int sum = 0;
-        for (int k = 0; k < N; ++k) {
-            sum += A[row * N + k] * B[k * N + col];
-        }
-        C[row * N + col] = sum;
-    }
-
-    matrix_mult_kernel((void*)&device_buffer_a,(void*)&device_buffer_b,(void*)&device_buffer_result,(void*)&MATRIX_SIZE);
-
-    for (i = 0; i < MATRIX_SIZE * MATRIX_SIZE; ++i) {
-        printf("%d ", host_buffer_result[i]);
-        if((i+1) % MATRIX_SIZE == 0){
-            printf("\n");
-        }
-    }
-
     // Create the device buffers
     cl_mem device_buffer_a = clCreateBuffer(context, CL_MEM_READ_ONLY, MATRIX_SIZE * MATRIX_SIZE * sizeof(int), NULL, NULL);
     cl_mem device_buffer_b = clCreateBuffer(context, CL_MEM_READ_ONLY, MATRIX_SIZE * MATRIX_SIZE * sizeof(int), NULL, NULL);
